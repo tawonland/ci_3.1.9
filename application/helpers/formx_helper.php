@@ -3,9 +3,10 @@
 function formx_input($data = '', $value = '', $c_edit = true, $extra = '')
 {
     
-	if(empty($extra)){
-		$extra = 'class="'._form_class().'"';
-	}
+    $class = _form_class() .' '.$data['class'];
+
+	$data['class'] = $class;
+
 
 	if($c_edit === FALSE){
 		$extra .= ' disabled';
@@ -17,8 +18,11 @@ function formx_input($data = '', $value = '', $c_edit = true, $extra = '')
 function formx_inputdate($data = '', $value = '', $c_edit = true, $extra = '')
 {
     
+	$class = _form_class() .' '.$data['class'];
+
+	$data['class'] = $class;
+
 	if(empty($extra)){
-		$extra = 'class="'._form_class().'"';
 		$extra .= 'autocomplete = "off" ';
 	}
 
@@ -46,18 +50,41 @@ function formx_inputdate($data = '', $value = '', $c_edit = true, $extra = '')
 	return 	$form;
 }
 
+if ( ! function_exists('form_email'))
+{
+	/**
+	 * Text Input Field
+	 *
+	 * @param	mixed
+	 * @param	string
+	 * @param	mixed
+	 * @return	string
+	 */
+	function form_email($data = '', $value = '', $extra = '')
+	{
+		
+	}
+}
+
 function formx_email($data = '', $value = '', $c_edit = TRUE, $extra = '')
 {
     
-	if($c_edit)
-	{
-		return form_email($data, $value , $extra);
+	$class = _form_class() .' '.$data['class'];
+
+	$data['class'] = $class;
+
+
+	if($c_edit === FALSE){
+		$extra .= ' disabled';
 	}
-	else
-	{
-		return $value;
-	}
-	
+
+	$defaults = array(
+			'type' => 'email',
+			'name' => is_array($data) ? '' : $data,
+			'value' => $value
+	);
+
+	return '<input '._parse_form_attributes($data, $defaults)._attributes_to_string($extra)." />\n";	
 }
 
 function formx_number($data = '', $value = '', $c_edit = TRUE, $extra = '')
@@ -108,11 +135,26 @@ function formx_dropdown($data = '', $options = array(), $selected = array(), $c_
 
 function formx_checkbox($data = '', $value = '', $checked = FALSE, $c_edit = TRUE, $extra = '')
 {
-	$extra = 'class="minimal"';
+	$class = 'minimal '.$data['class'];
+
+	$data['class'] = $class;
+
 	return form_checkbox($data, $value, $checked, $extra);
 }
 
 function _form_class()
 {
 	return 'form-control';
+}
+
+function formx_error()
+{
+	return array(
+			'required'      => 'Input %s tidak boleh kosong',
+			'alpha_numeric' => 'Input %s harus berupa huruf dan/atau angka',
+			'alpha_numeric_spaces' => 'Input %s harus berupa huruf, angka dan/atau spasi',
+			'min_length'    => 'Panjang %s harus lebih dari sama dengan %s karakter',
+			'valid_email'   => 'Input %s harus berupa email yang valid',
+			'decimal'   => 'Input %s harus berupa bilangan desimal',
+		);
 }

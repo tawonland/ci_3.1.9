@@ -7,6 +7,7 @@ class Login extends Front_Controller
     {
         parent::__construct();
 
+        $this->load->model('login_model');
     }
     
     public function index()
@@ -43,8 +44,6 @@ class Login extends Front_Controller
             redirect();
         }
 
-        $this->load->model('Tlogin_model');
-
         $username = $this->input->post('username', true);
         $password = $this->input->post('password', true);
 
@@ -58,7 +57,8 @@ class Login extends Front_Controller
         $this->load->library('SessionManager');
         $index = SessionManager::INDEX;
 
-        $user = $this->Tlogin_model->get_user($username);
+        $this->db->where('user_name', $username);
+        $user = $this->db->get('users')->row();
 
         $create_session = array();
         $create_session[$index]['auth']['isauthenticated'] = TRUE;
@@ -88,8 +88,9 @@ class Login extends Front_Controller
 
     private function _resolve_user_login($username, $password)
     {
-        $this->db->where('uname', $username);
-        $hash = $this->db->get('tlogin')->row('pwd');
+        
+        $this->db->where('user_name', $username);
+        $hash = $this->db->get('users')->row('user_password');
 
         return $this->_verify_password_hash($password,$hash);
     }
