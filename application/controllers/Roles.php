@@ -13,7 +13,40 @@ class Roles extends Auth_Controller
 
 	function index()
 	{
-		parent::listdata();
+		
+		$this->data['content_view'] = 'backend/template/inc_list_v2';
+		$this->data['list_view'] = 'roles_list_v';
+		$this->admin_template($this->data);
+	}
+
+	function data()
+	{
+		
+		$fetch_data = $this->Roles_model->make_datatables();
+
+		$data = array();
+		$recordsTotal = 0;
+		foreach ($fetch_data as $row) {
+
+			$sub_array = array();
+			$sub_array[] = '';
+			$sub_array[] = $row->role_name;
+			$sub_array[] = $row->isactive;
+			$sub_array[] = '';
+
+			$data[] = $sub_array;
+
+			$recordsTotal++;
+		}
+
+		$output = array(
+			"draw" 				=> intval($_POST["draw"]),
+			"recordsTotal"		=> $recordsTotal,
+			"recordsFiltered" 	=> $this->Roles_model->get_filtered_data(),
+			"recordsFiltered" 	=> $this->Roles_model->get_all_data(),
+			"data" 				=> $data
+		);
+		echo json_encode($output);
 	}
 
 	function add()

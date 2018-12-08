@@ -55,7 +55,7 @@ class Auth_Controller extends MY_Controller
 		$this->load->view("backend/template/admin_template_v", $data);
 	}
 
-	function listdata()
+	function listdata($a_kolom = array(), $a_data = array())
 	{
 
 		$this->data['content_view'] = 'backend/template/inc_list_v';
@@ -68,12 +68,12 @@ class Auth_Controller extends MY_Controller
 		$page = 'index/';
 		$this->uri_segment 	= $this->uri->segment(3);
 		$this->offset 		= $this->uri->segment(3);
-		$total_rows = $this->{$this->model}->getCount();
+		$total_rows 		= $this->{$this->model}->getCount();
 
 		$a_data = array();
-		$a_data = $this->a_data();
+		$a_data = $this->getData($a_kolom);
 
-		$this->data['table_generate'] = $this->tableGenerate($a_data);
+		$this->data['table_generate'] = $this->tableGenerate($a_kolom, $a_data);
 		$this->data['pagination'] = $this->getPagination($page, $total_rows);
 
 		//table footer list
@@ -84,22 +84,7 @@ class Auth_Controller extends MY_Controller
 		$this->admin_template($this->data);
 	}
 
-	function search()
-	{
-		
-		// get search string
-    	$search = ($this->input->post("table_search"))? $this->input->post("table_search") : "NIL";
-    	$search = ($this->uri->segment(3)) ? $this->uri->segment(3) : $search;
-
-    	$this->stringSearch = $search;
-    	$this->uri_segment 	= $this->uri->segment(4);
-
-
-        $this->listdatasearch();
-
-	}
-
-	function listdatasearch()
+	function listdatasearch($a_kolom = array())
 	{
 		$search = $this->getStringSearch();
 		$page = 'search/'.$search;
@@ -112,10 +97,10 @@ class Auth_Controller extends MY_Controller
 			$this->data['buttons']['add'] 	= $this->buttons->add($this->ctl);
 		}
 
-		$a_data = $this->a_data();
-		$total_rows = $this->{$this->model}->getCountSearch($search);
+		$a_data = $this->getData($a_kolom);
+		$total_rows = $this->{$this->model}->getCountSearch($a_kolom, $search);
 
-		$this->data['table_generate'] = $this->tableGenerate($a_data);
+		$this->data['table_generate'] = $this->tableGenerate($a_kolom, $a_data);
 		$this->data['pagination'] = $this->getPagination($page, $total_rows);
 
 		//table footer list
@@ -132,13 +117,13 @@ class Auth_Controller extends MY_Controller
 	}
 
 
-	function result()
+	function getResult($fields = array())
 	{
 		if($this->method == 'search')
 		{
 			
 			$search = $this->getStringSearch();
-			$data =  $this->{$this->model}->get_where_like($search, $this->getOffset())->result_array();
+			$data =  $this->{$this->model}->get_where_like($fields, $search, $this->getOffset())->result_array();
 		}
 		else
 		{
@@ -150,10 +135,10 @@ class Auth_Controller extends MY_Controller
 		return $data;
 	}
 
-	function a_data()
+	function getData($a_kolom = array())
 	{
 		
-		return $this->result();
+		return $this->getResult($a_kolom);
 	}
 
 	function type($value, $type = '')
@@ -175,11 +160,9 @@ class Auth_Controller extends MY_Controller
 		return strtoupper($value);
 	}
 
-	function tableGenerate($a_data)
+	function tableGenerate($a_kolom, $a_data)
 	{
 		
-		$a_kolom = $this->{$this->model}->a_kolom();
-
 		$type = '';
 
 		$no = 0;
@@ -276,18 +259,22 @@ class Auth_Controller extends MY_Controller
 		return $this->offset;
 	}
 
+	function get_form()
+	{
+
+		return '';
+	}
+
 	function add()
 	{
 		$this->data['content_view'] = 'backend/template/inc_data_v';
 		$this->data['form_action'] 	= $this->ctl.'/insert';
-		$this->data['form_data'] 	= 'backend/'.$this->ctl.'_v';
+		$this->data['form_data'] 	= 'backend/'.$this->ctl.'_data_v';
 		$this->data['description'] 	= 'Form ';
 
 		$row = $this->session->flashdata('row');
 
-		if($row){
-			$this->data['row'] = $row;
-		}
+		$this->data['row'] = $row;
 		
 		$this->admin_template($this->data);
 	}
@@ -295,7 +282,7 @@ class Auth_Controller extends MY_Controller
 	function detail($id)
 	{
 
-		$this->data['c_edit'] = false;
+		$this->data['c_edit'] = FALSE;
 
 		$key 	= $this->{$this->model}->getKey();
 		$id 	= $this->uri->segment(3);
@@ -304,10 +291,14 @@ class Auth_Controller extends MY_Controller
 
 		$this->data['content_view'] = 'backend/template/inc_detail_v';
 		$this->data['form_action'] 	= '';
-		$this->data['form_data'] 	= 'backend/'.$this->ctl.'_v';
+		$this->data['form_data'] 	= 'backend/'.$this->ctl.'_data_v';
 		$this->data['description'] 	= 'Form ';
 		$this->data['id']  = $id;
-		$this->data['row'] = $row;	
+		$this->data['row'] = $row;
+
+		$a_form = $this->get_form();
+
+		$this->data['a_form'] = $a_form;
 
 		$this->admin_template($this->data);
 	}
@@ -321,17 +312,21 @@ class Auth_Controller extends MY_Controller
 			die(info('has_no_access'));
 		}
 
-		$key 	= $this->{$this->model}->getKey();
+		$key 	= $this->getModel()->getKey();
 		$id 	= $this->uri->segment(3);
 		$where 	= array($key => $id);
-		$row 	= $this->{$this->model}->get_where($where)->row_array();
+		$row 	= $this->getModel()->get_where($where)->row_array();
 		
 
 		$this->data['content_view'] = 'backend/template/inc_data_v';
 		$this->data['form_action'] 	= $this->ctl.'/update/'.$id;
-		$this->data['form_data'] 	= 'backend/'.$this->ctl.'_v';
+		$this->data['form_data'] 	= 'backend/'.$this->ctl.'_data_v';
 		$this->data['description'] 	= 'Form ';
 		$this->data['row'] 	= $row;
+
+		$a_form = $this->get_form();
+
+		$this->data['a_form'] = $a_form;
 
 		$this->admin_template($this->data);
 	}
@@ -342,10 +337,9 @@ class Auth_Controller extends MY_Controller
 		print_r($_REQUEST);
 	}
 
-	function update($id)
+	function do_update($data, $id, $redirect = TRUE)
 	{
-		
-		
+		$this->getModel()->update($data, $id, $this->ctl, $redirect);
 	}
 
 	function delete()

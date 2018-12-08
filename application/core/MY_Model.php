@@ -49,11 +49,6 @@ class MY_Model extends CI_Model
         return $fields;
     }
 
-    function a_kolom()
-    {
-        return static::KOLOM;
-    }
-
     private function getArray($key, $array = FALSE) {
         $a_key = explode(',', $key);
 
@@ -94,10 +89,8 @@ class MY_Model extends CI_Model
         return $query;
     }
 
-   function get_where_like($string, $offset = NULL){
+   function get_where_like($fields = array(), $string, $offset = NULL){
 
-        $fields = $this->a_kolom();
-        
         foreach ($fields as $key => $value) {
             $field = $value['field'];
 
@@ -140,11 +133,9 @@ class MY_Model extends CI_Model
         return $this->db->count_all_results(static::getTable());
     }
 
-    function getCountSearch($search)
+    function getCountSearch($fields = array(), $search)
     {
-        
-        $fields = $this->a_kolom();
-        
+                
         foreach ($fields as $key => $value) {
             $field = $value['field'];
 
@@ -171,27 +162,30 @@ class MY_Model extends CI_Model
         }        
     }
 
-    function update($data, $id, $return = FALSE)
+    function update($data, $id, $controller = null, $redirect = TRUE)
     {
         $where = array(static::getKey() => $id);
 
-        $ok = $this->db->update(static::getTable(), $data, $where);
-        
-        if(!$ok)
+        $update = $this->db->update(static::getTable(), $data, $where);
+       
+        $info = 'success';
+        $saved = info('saved');
+        $page = 'detail';
+
+        if($update !== true)
         {
-            $error = $this->db->error();
+            $info = 'danger';
+            $saved = info('not_saved');
+            $page = 'edit';
         }
 
-        if($return)
+        if($redirect)
         {
-            return TRUE;
+            
+            $this->session->set_flashdata($info, $saved);
+            redirect($controller.'/'.$page.'/'.$id);
         }
-
-        list($dash, $ctl) = explode("_",strtolower(get_class($this)));
-
-        $this->session->set_flashdata('success', info('not_saved'));
-        redirect($ctl.'/detail/'.$id);
-        
+                
     }
 
      function delete($id, $return = FALSE)

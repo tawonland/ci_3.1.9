@@ -19,6 +19,17 @@ class App_Model extends MY_Model
         parent::__construct();
     }
 
+    function getConn($conn = FALSE){
+
+        if(!$conn){
+            return $this->load->database('default', TRUE);
+        }
+        else{
+            return $this->load->database($conn, TRUE);
+        }
+
+    }
+
     function getSchema() {
         global $conf;
 
@@ -30,8 +41,6 @@ class App_Model extends MY_Model
     }
 
     function getTable($table = null) {
-        echo $table;
-        die();
         if (empty($table))
             $table = static::TABLE;
 

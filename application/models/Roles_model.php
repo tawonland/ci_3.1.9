@@ -1,6 +1,5 @@
 <?php
 
-
 /**
 * 
 */
@@ -16,23 +15,33 @@ class Roles_model extends MY_Model
 		parent::__construct();
 	}
 
-	function a_kolom()
+	function make_query()
 	{
-		
-		$a_kolom = array();
-		$a_kolom[] = array('label' => array('data' => 'No', 'align' => 'center'), 'field' => 'no:');
-		$a_kolom[] = array('label' => 'Role ID', 'field' => 'role_id');
+		$this->db->select("*");
+		$this->db->from($this->getTable());
+	}
 
-		$a_kolom[] = array('label' => 'Nama Role', 'field' => 'role_name', 'url' => '#');
+	function make_datatables()
+	{
+		$this->make_query();
 
-		$isactive = array('<span class="label label-danger">Tidak Aktif</span>', '<span class="label label-success">Aktif</span>');
+		$query = $this->db->get();
+		return $query->result();
+	}
 
-		$a_kolom[] = array('label' => array('data' => 'Aktif', 'align' => 'center'), 
-							'td_attributes' => array('align' => 'center'), 
-							'field' => 'isactive', 
-							'value' => $isactive);
+	function get_filtered_data()
+	{
+		$this->make_query();
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
 
-		return $a_kolom;
+	function get_all_data()
+	{
+		$this->db->select("*");
+		$this->db->from($this->getTable());
+
+		return $this->db->count_all_results();
 	}
 }
 ?>

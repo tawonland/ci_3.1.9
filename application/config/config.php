@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 //$config['base_url'] = '';
 
-$config['site_path'] = 'ci_3.1.9/';
+$config['site_path'] = 'ci_3.1.9_v_2/';
 
 $config['base_url'] = 'http://localhost/'.$config['site_path'];
 

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 100136
 File Encoding         : 65001
 
-Date: 2018-11-04 14:37:43
+Date: 2018-12-09 04:25:14
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -125,11 +125,11 @@ INSERT INTO `book_images` VALUES ('3', '33', 'http://localhost/hmvcci318/upload/
 -- ----------------------------
 DROP TABLE IF EXISTS `countries`;
 CREATE TABLE `countries` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `country_id` int(11) NOT NULL AUTO_INCREMENT,
   `country_code` varchar(2) NOT NULL DEFAULT '',
   `country_name` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=247 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`country_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=248 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of countries
@@ -380,6 +380,25 @@ INSERT INTO `countries` VALUES ('243', 'YU', 'Yugoslavia');
 INSERT INTO `countries` VALUES ('244', 'ZR', 'Zaire');
 INSERT INTO `countries` VALUES ('245', 'ZM', 'Zambia');
 INSERT INTO `countries` VALUES ('246', 'ZW', 'Zimbabwe');
+INSERT INTO `countries` VALUES ('247', '1', '2');
+
+-- ----------------------------
+-- Table structure for employes
+-- ----------------------------
+DROP TABLE IF EXISTS `employes`;
+CREATE TABLE `employes` (
+  `pegawai_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `namadepan` varchar(15) DEFAULT NULL,
+  `namabelakang` varchar(15) DEFAULT NULL,
+  `gelardepan` varchar(5) DEFAULT NULL,
+  `gelarbelakang` varchar(5) DEFAULT NULL,
+  `email` varchar(70) DEFAULT NULL,
+  PRIMARY KEY (`pegawai_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of employes
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for order
@@ -447,30 +466,16 @@ DROP TABLE IF EXISTS `ref_roles`;
 CREATE TABLE `ref_roles` (
   `role_id` varchar(7) NOT NULL,
   `role_name` varchar(255) NOT NULL,
-  `isaktif` smallint(1) NOT NULL DEFAULT '0',
+  `isactive` smallint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of ref_roles
 -- ----------------------------
-
--- ----------------------------
--- Table structure for roles
--- ----------------------------
-DROP TABLE IF EXISTS `roles`;
-CREATE TABLE `roles` (
-  `role_id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_name` varchar(100) NOT NULL,
-  `isactive` smallint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-
--- ----------------------------
--- Records of roles
--- ----------------------------
-INSERT INTO `roles` VALUES ('1', 'Super User', '1');
-INSERT INTO `roles` VALUES ('2', 'Administrator', '1');
+INSERT INTO `ref_roles` VALUES ('AD', 'Administrator', '1');
+INSERT INTO `ref_roles` VALUES ('E', 'Employe', '0');
+INSERT INTO `ref_roles` VALUES ('SA', 'Super Admin', '1');
 
 -- ----------------------------
 -- Table structure for users
@@ -488,16 +493,19 @@ CREATE TABLE `users` (
   `user_mobile` varchar(20) DEFAULT NULL,
   `user_password` varchar(255) NOT NULL,
   `user_photo` varchar(200) DEFAULT NULL,
-  `user_active` int(11) NOT NULL DEFAULT '1',
+  `user_active` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`user_name`),
   UNIQUE KEY `user_mobile` (`user_mobile`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('5', '114746095932612758526', 'landungpujisantoso2@gmail.com', null, 'Landung', 'Puji Santoso', 'Landung Puji Santoso', '', null, '$2y$10$nnlJNvUtWl4SUktrJ/ZNrew7P/tIAP2znlL4m8ZT6XLhRldBn/sY6', null, '1');
+INSERT INTO `users` VALUES ('5', '114746095932612758526', 'landungpujisantoso@gmail.com', null, 'Landung', 'Puji Santoso', 'Landung Puji Santoso', 'landungpujisantoso@gmail.com', null, '$2y$10$nnlJNvUtWl4SUktrJ/ZNrew7P/tIAP2znlL4m8ZT6XLhRldBn/sY6', null, '1');
+INSERT INTO `users` VALUES ('6', '', 'landungpujisantoso2@gmail.com', null, null, null, 'Landung Puji Santoso 2', 'landungpujisantoso2@gmail.com', null, '$2y$10$YTdwz9WdaDNuPz9.8eizl.qYp1UPIsILjzT7O0j25EVSxLszHP9gm', null, '1');
+INSERT INTO `users` VALUES ('9', '', 'landungpujisantoso3@gmail.com', null, null, null, 'Landung Puji Santoso 3wv', 'landungpujisantoso3@gmail.com', null, '$2y$10$04HukNwkBr2qjz/ukG8M5e6BsyDs29CPkDpGEpLJ93FhpR9eZiBHy', null, '1');
+INSERT INTO `users` VALUES ('10', '', 'landungpujisantoso4@gmail.com', null, null, null, 'Landung Puji Santoso 4', 'landungpujisantoso4@gmail.com', null, '$2y$10$VEFvy8sE2/BRQldCXjluIOJwqG6mG8iNTst7TVdY3XNpcD17qGF3W', null, '0');
 
 -- ----------------------------
 -- Table structure for user_billing

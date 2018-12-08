@@ -20,4 +20,9 @@ class MY_Controller extends CI_Controller
 		$this->model = ucfirst($this->ctl).'_model';
 		$this->load->model($this->model);
 	}
+
+	function getModel(){
+		return $this->{$this->model};
+	}
+
 }

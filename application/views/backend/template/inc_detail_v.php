@@ -1,19 +1,6 @@
 <?php
 
-$err_msg = $this->session->flashdata('error');
-
-if(isset($err_msg)){
-	echo '<div class="row">';
-		echo '<div class="col-md-12">';
-	    	echo '<div class="alert alert-danger">'.$err_msg.'</div>';
-	    echo '</div>';
-    echo '</div>';
-}
-
-// var_dump($c_update);
-
-// die();
-
+$this->load->view('backend/template/inc_alert');
 ?>
 <div class="row">
 	<div class="col-md-12">

@@ -6,9 +6,8 @@ function formx_input($data = '', $value = '', $c_edit = true, $extra = '')
     $class = _form_class() .' '.$data['class'];
 
 	$data['class'] = $class;
-
-
-	if($c_edit === FALSE){
+	
+	if($c_edit === false){
 		$extra .= ' disabled';
 	}
 

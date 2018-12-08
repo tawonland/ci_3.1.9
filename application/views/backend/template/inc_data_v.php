@@ -1,14 +1,6 @@
 <?php
 
-$err_msg = $this->session->flashdata('error');
-
-if(isset($err_msg)){
-	echo '<div class="row">';
-		echo '<div class="col-md-12">';
-	    	echo '<div class="alert alert-danger">'.$err_msg.'</div>';
-	    echo '</div>';
-    echo '</div>';
-}
+$this->load->view('backend/template/inc_alert');
 
 ?>
 <div class="row">
@@ -37,7 +29,7 @@ if(isset($err_msg)){
 				{
 				?>
 				<button type="reset" class="btn btn-default">Reset</button>
-				<button type="submit" class="btn btn-info pull-right">Simpan</button>
+				<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Simpan</button>
 				<?php
 				}
 				?>

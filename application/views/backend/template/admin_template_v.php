@@ -27,10 +27,13 @@
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 
-  <!-- Google Font -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <script src="<?php echo base_url();?>assets/jQuery-3.3.1/jquery-3.3.1.js"></script>
 
-  <script src="<?php echo base_url();?>assets/js/jquery-1.7.1.min.js"></script>
+  <!-- DataTables -->
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/DataTables/datatables.css">
+  <script type="text/javascript" charset="utf8" src="<?php echo base_url();?>assets/DataTables/datatables.js"></script>
+
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <!-- Site wrapper -->
@@ -237,7 +240,6 @@
         <?php echo $page_header; ?>
         <small><?php echo $description; ?></small>
       </h1>
-      Download this source code at <a href="https://github.com/tawonland/demo1" target="_blank">https://github.com/tawonland/demo1</a>
       <ol class="breadcrumb">
         <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i> Admin</a></li>
         <li><a href="<?php echo base_url().$ctl; ?>"><?php echo ucfirst($ctl); ?></a></li>
@@ -476,8 +478,6 @@ if(ENVIRONMENT == 'development'){
 }
 
 ?>
-<!-- jQuery 3 -->
-<script src="<?php echo base_url();?>assets/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="<?php echo base_url();?>assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- SlimScroll -->
@@ -546,5 +546,6 @@ function getForm(elem) {
 }
 
 </script>
+
 </body>
 </html>

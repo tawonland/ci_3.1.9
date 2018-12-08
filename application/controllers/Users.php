@@ -13,8 +13,40 @@ class Users extends Auth_Controller
 
 	function index()
 	{
+		$a_kolom = $this->getKolom();
+		parent::listdata($a_kolom);
+	}
 
-		parent::listdata();
+
+	function getKolom()
+	{
+		$a_kolom[] = array('label' => array('data' => 'No', 'align' => 'center'), 'field' => 'no:');
+		$a_kolom[] = array('label' => 'Nama Lengkap', 'field' => 'user_fullname');
+		$a_kolom[] = array('label' => 'No HP', 'field' => 'user_mobile');
+		
+		$isactive = array('<span class="label label-danger">Tidak Aktif</span>', '<span class="label label-success">Aktif</span>');
+
+		$a_kolom[] = array('label' => array('data' => 'Aktif', 'align' => 'center'), 
+							'td_attributes' => array('align' => 'left'), 
+							'field' => 'user_active', 
+							'value' => $isactive);
+
+		return $a_kolom;
+	}
+
+	function search()
+	{
+		
+		// get search string
+    	$search = ($this->input->post("table_search"))? $this->input->post("table_search") : "NIL";
+    	$search = ($this->uri->segment(3)) ? $this->uri->segment(3) : $search;
+
+    	$this->stringSearch = $search;
+    	$this->uri_segment 	= $this->uri->segment(4);
+
+    	$a_kolom = $this->getKolom();
+        $this->listdatasearch($a_kolom);
+
 	}
 
 	function add()
@@ -46,6 +78,7 @@ class Users extends Auth_Controller
 
 		if ($this->form_validation->run() == FALSE)
         {
+           	$data['user_active'] = '';
            	$this->session->set_flashdata('row', $data);
 
            	$this->session->set_flashdata('error', validation_errors());
@@ -54,7 +87,7 @@ class Users extends Auth_Controller
         }
 
         //load model
-        $this->load->model('users/m_users');
+        $this->load->model('users/Users_model');
 
         //
         $data['user_password']  	= password_hash('admin', PASSWORD_BCRYPT);
@@ -62,7 +95,7 @@ class Users extends Auth_Controller
         $data['user_fullname']		= $data['user_fullname'];
 
         //insert data
-       	$id = $this->M_Users->insert($data);
+       	$id = $this->Users_model->insert($data);
         
         if(!$id)
         {
@@ -100,12 +133,21 @@ class Users extends Auth_Controller
         }
 
         //load model
-        $this->load->model('users/m_users');
+        $this->load->model('users/users_model');
 
         //
         $data['user_name']		= $data['user_email'];
 
-       	$this->M_Users->update($data, $id);
+       	$update = $this->users_model->update($data, $id);
+
+       	if($update === false)
+        {
+        	$this->session->set_flashdata('error', info('not_saved'));
+        	redirect($this->ctl.'/edit/'.$id);
+        }
+
+       	$this->session->set_flashdata('success', info('saved'));
+       	redirect($this->ctl.'/detail/'.$id);
        
 	}
 
