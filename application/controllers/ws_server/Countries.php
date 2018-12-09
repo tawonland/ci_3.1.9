@@ -7,9 +7,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . '/libraries/REST_Controller.php';
 use Restserver\Libraries\REST_Controller;
 
-const table  = 'ref_roles';
 
-class Ref_roles extends REST_Controller {
+class Countries extends REST_Controller {
+
+    var $table  = 'countries';
 
     function __construct($config = 'rest') {
         parent::__construct($config);
@@ -18,23 +19,22 @@ class Ref_roles extends REST_Controller {
 
     //Menampilkan data kontak
     function index_get() {
-        $id = $this->get('role_id');
+        $id = $this->get('country_id');
         if ($id == '') {
-            $kontak = $this->db->get('ref_roles')->result();
+            $result = $this->db->get($this->table)->result();
         } else {
-            $this->db->where('role_id', $id);
-            $kontak = $this->db->get('ref_roles')->result();
+            $this->db->where('country_id', $id);
+            $result = $this->db->get($this->table)->result();
         }
-        $this->response($kontak, 200);
+        $this->response($result, 200);
     }
 
     //Mengirim atau menambah data kontak baru
 	function index_post() {
         $data = array(
-                    'role_id'     => $this->post('role_id'),
-                    'role_name'     => $this->post('role_name'),
-                    'isactive'      => $this->post('isactive'));
-        $insert = $this->db->insert('ref_roles', $data);
+                    'country_code'     => $this->post('country_code'),
+                    'country_name'     => $this->post('country_name'));
+        $insert = $this->db->insert($this->table, $data);
         if ($insert) {
             $this->response($data, 200);
         } else {
@@ -45,13 +45,12 @@ class Ref_roles extends REST_Controller {
 
 	//Memperbarui data kontak yang telah ada
 	function index_put() {
-        $id = $this->put('role_id');
+        $id = $this->put('country_id');
         $data = array(
-                    'role_id'       => $this->put('role_id'),
-                    'role_name'          => $this->put('role_name'),
-                    'isactive'    => $this->put('isactive'));
-        $this->db->where('role_id', $id);
-        $update = $this->db->update('ref_roles', $data);
+                    'country_code'      => $this->put('country_code'),
+                    'country_name'      => $this->put('country_name'));
+        $this->db->where('country_id', $id);
+        $update = $this->db->update($this->table, $data);
         if ($update) {
             $this->response($data, 200);
         } else {
@@ -61,9 +60,9 @@ class Ref_roles extends REST_Controller {
 
     //Menghapus salah satu data kontak
 	function index_delete() {
-        $id = $this->delete('role_id');
-        $this->db->where('role_id', $id);
-        $delete = $this->db->delete('ref_roles');
+        $id = $this->delete('country_id');
+        $this->db->where('country_id', $id);
+        $delete = $this->db->delete($this->table);
         if ($delete) {
             $this->response(array('status' => 'success'), 201);
         } else {

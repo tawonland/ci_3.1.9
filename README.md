@@ -6,8 +6,14 @@ Framework Codeigniter 3.1.8
   - List Datatables
   	- inc_list_v2
 
-# Rest API
-	- 0 %
+# Res_server
+	- controller/ws_server/ref_roles
+  - crud
+  - API with key X
+
+# Rest_client
+  - controller/ws_client/ref_roles
+  - crud
 
 # Next Features
   - Front Menu
