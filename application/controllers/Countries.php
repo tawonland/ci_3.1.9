@@ -155,8 +155,8 @@ class Countries extends Auth_Controller
         }
 
         //
-        $data['country_codes']  	= $data['country_code'];
-        $data['country_name']	= $data['country_name'];
+        $data['country_code']  	= $data['country_code'];
+        $data['country_name']		= $data['country_name'];
 
        	$this->do_update($data, $id);
 

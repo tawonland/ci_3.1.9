@@ -18,7 +18,30 @@ class Auth_Controller extends MY_Controller
 
 		$this->check_session();
 
+		$userdata = array();
+
+		
+		$user_photo = SessionManager::getUserPhoto();
+		
+		if(empty($user_photo)){
+			$user_photo = base_url('assets/dist/img/user2-160x160.jpg');
+		}
+
+		$userdata['user_photo'] = $user_photo;
+
+		
+
+
+		$this->data['userdata'] = $userdata;
+
 		$this->load->library('buttons');
+
+		// echo '<pre>';
+		// print_r($this->session->userdata());
+		// echo '</pre>';
+
+		// echo SessionManager::getUserName();
+
 
 		$this->data['admin_sidebar_menu'] = 'backend/template/admin_sidebar_menu';
 
@@ -287,14 +310,19 @@ class Auth_Controller extends MY_Controller
 
 		$key 	= $this->{$this->model}->getKey();
 		$id 	= $this->uri->segment(3);
-		$where 	= array($key => $id);
-		$row 	= $this->{$this->model}->get_where($where)->row_array();
 
 		$this->data['content_view'] = 'backend/template/inc_detail_v';
 		$this->data['form_action'] 	= '';
 		$this->data['form_data'] 	= 'backend/'.$this->ctl.'_data_v';
 		$this->data['description'] 	= 'Form ';
+
 		$this->data['id']  = $id;
+		
+		$this->getModel()->get_select();
+		$where 	= array($key => $id);
+		$this->getModel()->get_where($where);
+		$row 	= $this->getModel()->get_row();
+		
 		$this->data['row'] = $row;
 
 		$a_form = $this->get_form();
@@ -315,10 +343,12 @@ class Auth_Controller extends MY_Controller
 
 		$key 	= $this->getModel()->getKey();
 		$id 	= $this->uri->segment(3);
-		$where 	= array($key => $id);
-		$row 	= $this->getModel()->get_where($where)->row_array();
-		
 
+		$where 	= array($key => $id);
+		$this->getModel()->get_select();
+		$this->getModel()->get_where($where);
+		$row 	= $this->getModel()->get_row();
+	
 		$this->data['content_view'] = 'backend/template/inc_data_v';
 		$this->data['form_action'] 	= $this->ctl.'/update/'.$id;
 		$this->data['form_data'] 	= 'backend/'.$this->ctl.'_data_v';

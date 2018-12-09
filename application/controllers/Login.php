@@ -72,9 +72,14 @@ class Login extends Front_Controller
 
         $create_session = array();
         $create_session[$index]['auth']['isauthenticated'] = TRUE;
-        $create_session[$index]['auth']['username'] = $user->uname;
+        $create_session[$index]['auth']['username'] = $user->user_name;
         $create_session[$index]['auth']['level']    = $user->level;
-
+        $create_session[$index]['auth']['user_id']          = $user->user_id;
+        $create_session[$index]['auth']['ip_address']       = $ip_address;
+        $create_session[$index]['auth']['user_name']        = $user->user_name;
+        $create_session[$index]['auth']['user_email']       = $user->user_email;
+        $create_session[$index]['auth']['user_firstname']   = $user->user_firstname;
+        $create_session[$index]['auth']['user_lastname']    = $user->user_lastname;
 
         $this->session->set_userdata($create_session);
 
@@ -127,64 +132,73 @@ class Login extends Front_Controller
 
         $getUserInfo = $this->google->getUserInfo();
 
+        echo '<pre>';
+        print_r($getUserInfo);
+        die();
+
         //cek, apakah user?
         $this->load->model('Users_model');
 
         $user_name = $getUserInfo['email'];
 
         //cek apakah email sudah ada di database
-        //$user = $this->Users_model->get_where($user_name);
+        $where = array('user_name' => $user_name);
 
-        // if($user == false)
-        // {
+        $this->getModel()->get_select();
+        $this->getModel()->get_where($where);
+        $this->db->or_where(array('user_email' => $user_name));
+
+        $user = $this->getModel()->get_row();
+
+        if(!$user)
+        {
             
-        //     $data['google_id']          = $getUserInfo['id'];
-        //     $data['user_name']          = $getUserInfo['email'];
-        //     $data['user_email']         = $getUserInfo['email'];
-        //     $data['user_emailnotif']    = $getUserInfo['email'];
-        //     $data['user_fullname']      = $getUserInfo['name'];
-        //     $data['user_gender']        = $getUserInfo['gender'];
-        //     $data['user_firstname']     = $getUserInfo['givenName'];
-        //     $data['user_lastname']      = $getUserInfo['family_name'];
-        //     $data['user_password']      = password_hash('hmvcci318', PASSWORD_BCRYPT);
+            $data['google_id']          = $getUserInfo['id'];
+            $data['user_name']          = $getUserInfo['email'];
+            $data['user_email']         = $getUserInfo['email'];
+            $data['user_emailnotif']    = $getUserInfo['email'];
+            $data['user_fullname']      = $getUserInfo['name'];
+            $data['user_gender']        = $getUserInfo['gender'];
+            $data['user_firstname']     = $getUserInfo['givenName'];
+            $data['user_lastname']      = $getUserInfo['family_name'];
+            $data['user_password']      = password_hash('admin', PASSWORD_BCRYPT);
 
-        //     $id = $this->M_Users->insert($data);
+            $id = $this->Users_model->insert($data);
 
-
-        //     if(!$id)
-        //     {
-        //         $this->session->set_flashdata('error', 'Pendaftaran Gagal');
-        //         redirect('login');
-        //     }
-
-
-        //     $user = $this->M_Users->get_login($user_name);
+            if(!$id)
+            {
+                $this->session->set_flashdata('error', 'Register Email Gagal');
+                redirect('login');
+            }
             
-        //     // $this->session->set_flashdata('error', 'Maaf, email anda belum terdaftar');
-        //     // return redirect('login');
-        // }
+        }
 
-        
         // ambil user
         
         $ip_address = $this->input->ip_address();
         
+        $this->load->library('SessionManager');
+        $index = SessionManager::INDEX;
+
+        $create_session = array();
+        $create_session[$index]['auth']['isauthenticated'] = TRUE;
+        $create_session[$index]['auth']['username'] = $user->user_name;
+        $create_session[$index]['auth']['level']    = $user->level;
+        $create_session[$index]['auth']['user_id']          = $user->user_id;
+        $create_session[$index]['auth']['ip_address']       = $ip_address;
+        $create_session[$index]['auth']['user_name']        = $user->user_name;
+        $create_session[$index]['auth']['user_email']       = $user->user_email;
+        $create_session[$index]['auth']['user_firstname']   = $user->user_firstname;
+        $create_session[$index]['auth']['user_lastname']    = $user->user_lastname;
+
         //google session
-        $session_user['loginwith']      = 'google';
-        $session_user['access_token']   = $access_token;
-        $session_user['picture']        = $getUserInfo['picture'];
+        $create_session[$index]['auth']['loginwith']        = 'google';
+        $create_session[$index]['auth']['access_token']     = $access_token;
+        $create_session[$index]['auth']['picture']          = $getUserInfo['picture'];
 
-        $session_user['loged_in']       = TRUE;
-        $session_user['user_id']        = $user->user_id;
-        $session_user['ip_address']     = $ip_address;
-        $session_user['user_name']      = $user->user_name;
-        $session_user['user_email']     = $user->user_email;
-        $session_user['user_firstname'] = $user->user_firstname;
-        $session_user['user_lastname']  = $user->user_lastname;
+        $this->session->set_userdata($create_session);
 
-        $this->session->set_userdata($session_user);
-
-        return redirect('admin');
+        redirect('dashboard');
 
     }
 

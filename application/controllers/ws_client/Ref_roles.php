@@ -7,7 +7,7 @@ class Ref_roles extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->API="http://localhost/ci_3.1.9_v_2/ws_server/ref_roles";
+        $this->API= base_url() . "ws_server/ref_roles";
         $this->load->library('curl');
     }
 

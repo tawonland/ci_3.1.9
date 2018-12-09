@@ -36,7 +36,13 @@ class SessionManager {
     public static function getUserName() {
         $auth = self::get('auth');
 
-        return $auth['username'];
+        return $auth['user_name'];
+    }
+
+    public static function getUserPhoto() {
+        $auth = self::get('auth');
+
+        return $auth['user_photo'];
     }
 
     /**

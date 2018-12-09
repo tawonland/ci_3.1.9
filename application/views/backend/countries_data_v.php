@@ -8,7 +8,7 @@
 
     //param formx
     $data         = ['id' => $id, 'name' => $field, 'class' => $class, 'placeholder' => $placeholder];
-    $value        = isset($row[$field]) ? $row[$field] : '';
+    $value        = isset($row->$field) ? $row->$field : '';
     $extra        = isset($v['extra']) ? $v['extra'] : '';
     $checked      = isset($v['checked']) ? $v['checked'] : FALSE;
     ?>

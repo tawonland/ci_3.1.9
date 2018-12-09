@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 100136
 File Encoding         : 65001
 
-Date: 2018-12-09 04:25:14
+Date: 2018-12-09 16:50:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -473,9 +473,11 @@ CREATE TABLE `ref_roles` (
 -- ----------------------------
 -- Records of ref_roles
 -- ----------------------------
+INSERT INTO `ref_roles` VALUES ('1', 'Tess Ubah', '0');
 INSERT INTO `ref_roles` VALUES ('AD', 'Administrator', '1');
 INSERT INTO `ref_roles` VALUES ('E', 'Employe', '0');
 INSERT INTO `ref_roles` VALUES ('SA', 'Super Admin', '1');
+INSERT INTO `ref_roles` VALUES ('T', 'Tes Update', '1');
 
 -- ----------------------------
 -- Table structure for users
@@ -494,6 +496,7 @@ CREATE TABLE `users` (
   `user_password` varchar(255) NOT NULL,
   `user_photo` varchar(200) DEFAULT NULL,
   `user_active` int(11) NOT NULL DEFAULT '0',
+  `user_emailnotif` varchar(50) NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`user_name`),
   UNIQUE KEY `user_mobile` (`user_mobile`)
@@ -502,10 +505,10 @@ CREATE TABLE `users` (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('5', '114746095932612758526', 'landungpujisantoso@gmail.com', null, 'Landung', 'Puji Santoso', 'Landung Puji Santoso', 'landungpujisantoso@gmail.com', null, '$2y$10$nnlJNvUtWl4SUktrJ/ZNrew7P/tIAP2znlL4m8ZT6XLhRldBn/sY6', null, '1');
-INSERT INTO `users` VALUES ('6', '', 'landungpujisantoso2@gmail.com', null, null, null, 'Landung Puji Santoso 2', 'landungpujisantoso2@gmail.com', null, '$2y$10$YTdwz9WdaDNuPz9.8eizl.qYp1UPIsILjzT7O0j25EVSxLszHP9gm', null, '1');
-INSERT INTO `users` VALUES ('9', '', 'landungpujisantoso3@gmail.com', null, null, null, 'Landung Puji Santoso 3wv', 'landungpujisantoso3@gmail.com', null, '$2y$10$04HukNwkBr2qjz/ukG8M5e6BsyDs29CPkDpGEpLJ93FhpR9eZiBHy', null, '1');
-INSERT INTO `users` VALUES ('10', '', 'landungpujisantoso4@gmail.com', null, null, null, 'Landung Puji Santoso 4', 'landungpujisantoso4@gmail.com', null, '$2y$10$VEFvy8sE2/BRQldCXjluIOJwqG6mG8iNTst7TVdY3XNpcD17qGF3W', null, '0');
+INSERT INTO `users` VALUES ('5', '114746095932612758526', 'landungpujisantoso@gmail.com', null, 'Landung', 'Puji Santoso', 'Landung Puji Santoso', 'landungpujisantoso@gmail.com', null, '$2y$10$nnlJNvUtWl4SUktrJ/ZNrew7P/tIAP2znlL4m8ZT6XLhRldBn/sY6', null, '1', '');
+INSERT INTO `users` VALUES ('6', '', 'landungpujisantoso2@gmail.com', null, null, null, 'Landung Puji Santoso 2', 'landungpujisantoso2@gmail.com', null, '$2y$10$YTdwz9WdaDNuPz9.8eizl.qYp1UPIsILjzT7O0j25EVSxLszHP9gm', null, '1', '');
+INSERT INTO `users` VALUES ('9', '', 'landungpujisantoso3@gmail.com', null, null, null, 'Landung Puji Santoso 3wv', 'landungpujisantoso3@gmail.com', null, '$2y$10$04HukNwkBr2qjz/ukG8M5e6BsyDs29CPkDpGEpLJ93FhpR9eZiBHy', null, '1', '');
+INSERT INTO `users` VALUES ('10', '', 'landungpujisantoso4@gmail.com', null, null, null, 'Landung Puji Santoso 4', 'landungpujisantoso4@gmail.com', null, '$2y$10$VEFvy8sE2/BRQldCXjluIOJwqG6mG8iNTst7TVdY3XNpcD17qGF3W', null, '0', '');
 
 -- ----------------------------
 -- Table structure for user_billing
