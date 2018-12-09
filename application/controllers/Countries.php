@@ -1,5 +1,5 @@
 <?php
-
+ini_set("display_errors", 1);
 /**
 *
 */
@@ -21,8 +21,11 @@ class Countries extends Auth_Controller
 
 	function fetch_data()
 	{
-		
-		$fetch_data = $this->getModel()->make_datatables();
+			
+		$select_column = array("country_id", "country_code", "country_name");
+		$order_column = array(null, "country_code", "country_name", null);
+
+		$fetch_data = $this->getModel()->make_datatables($select_column, $order_column);
 
 		$data = array();
 		$recordsTotal = 0;

@@ -1,5 +1,5 @@
 <?php
-class Login_model extends App_Model {
+class Login_model extends Query_Model {
 
     CONST TABLE = 'users';
 
@@ -9,11 +9,6 @@ class Login_model extends App_Model {
 		$query = $this->db->where($where)->get(static::getTable());
 		
 		return $query->row();
-	}
-
-	function getTable($tes = '')
-	{
-		
 	}
 	
 }

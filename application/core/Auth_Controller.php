@@ -1,4 +1,5 @@
 <?php
+ini_set("display_errors", 1);
 class Auth_Controller extends MY_Controller
 {
 	public $c_insert 	= true;

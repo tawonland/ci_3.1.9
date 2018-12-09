@@ -110,24 +110,6 @@ class MY_Model extends CI_Model
         return static::LIMIT;
     }
 
-	// function getRowById($id)
-	// {
-	// 	$query = $this->db->where([static::getKey() => $id])->get('users');
-
-	// 	$num = $query->num_rows();
-
-	// 	if($num < 1)
-	// 	{
-	// 		return FALSE;
-	// 	}
-
-	// 	$row = $query->row();
-
-	// 	$array = json_decode(json_encode($row), TRUE);
-
-	// 	return $array;
-	// }
-
     function getCount()
     {
         return $this->db->count_all_results(static::getTable());
@@ -202,10 +184,6 @@ class MY_Model extends CI_Model
         }
 
         return TRUE;
-   
-        
     }
-
-
 
 }
